@@ -22,6 +22,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.use(express.static(path.join(__dirname, 'public')));
 const botName = 'ChatCord';
+
 //Run when client connects
 io.on('connection', (socket) => {
   socket.on('joinRoom', ({ username, room }) => {
@@ -55,7 +56,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('writing', ({ username, room, typing }) => {
-    io.to(room).emit('isWriting', {
+    socket.broadcast.to(room).emit('isWriting', {
       isWriting: typing,
       name: username,
     });
