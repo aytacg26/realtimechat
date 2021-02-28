@@ -33,11 +33,11 @@ io.on('connection', (socket) => {
 
   //When a user disconnects, we will use :
   socket.on('disconnect', () => {
-    io.emit('leftMessage', 'A User has left the chat');
+    io.emit('message', 'A User has left the chat');
   });
 
   socket.on('chatMessage', (msg) => {
-    console.log(msg);
+    io.emit('message', msg);
   });
 });
 

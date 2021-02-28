@@ -2,12 +2,27 @@ const chatForm = document.getElementById('chat-form');
 
 const socket = io();
 
-socket.on('message', async (message) => {
-  console.log(message);
-});
+const cleanInput = () => {
+  const inputElement = document.getElementById('msg');
+  inputElement.value = '';
+  inputElement.focus();
+};
 
-socket.on('leftMessage', async (message) => {
-  console.log(message);
+const scrollUp = () => {
+  const chatMessages = document.querySelector('.chat-messages');
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+};
+
+const outputMessage = (message) => {
+  const div = document.createElement('div');
+  div.classList.add('message');
+  div.innerHTML = `<p class="meta">Aytac Güley <span>9:12pm</span></p><p class="text">${message}</p>`;
+  document.querySelector('.chat-messages').appendChild(div);
+  scrollUp();
+};
+
+socket.on('message', async (message) => {
+  outputMessage(message);
 });
 
 socket.on('user', async (data) => {
@@ -19,6 +34,7 @@ chatForm.addEventListener('submit', (e) => {
 
   //Get message text from input element under the form
   const message = e.target.elements.msg.value;
+  cleanInput();
 
   // const data = {
   //   name: 'Aytac',
