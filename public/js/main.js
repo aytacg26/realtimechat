@@ -1,5 +1,10 @@
 const chatForm = document.getElementById('chat-form');
 
+//Get Username and Room from URL:
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+
 const socket = io();
 
 const cleanInput = () => {
@@ -16,10 +21,12 @@ const scrollUp = () => {
 const outputMessage = (message) => {
   const div = document.createElement('div');
   div.classList.add('message');
-  div.innerHTML = `<p class="meta">Aytac Güley <span>9:12pm</span></p><p class="text">${message}</p>`;
+  div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p><p class="text">${message.text}</p>`;
   document.querySelector('.chat-messages').appendChild(div);
   scrollUp();
 };
+
+socket.emit('joinRoom', { username, room });
 
 socket.on('message', async (message) => {
   outputMessage(message);
